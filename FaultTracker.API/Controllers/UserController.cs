@@ -97,7 +97,7 @@ namespace FaultTracker.API.Controllers
             mappedUser.ModifyDate = DateTime.Now;
             mappedUser.IsDeleted = false;
 
-            _uow.Users.AddAsync(mappedUser);
+            await _uow.Users.AddAsync(mappedUser);
             var result = await _uow.CompleteAsync();
 
             if (result > 0)

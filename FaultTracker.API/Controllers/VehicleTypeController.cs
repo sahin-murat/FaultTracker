@@ -97,7 +97,7 @@ namespace FaultTracker.API.Controllers
             mappedVehicleType.ModifyDate = DateTime.Now;
             mappedVehicleType.IsDeleted = false;
 
-            _uow.VehicleTypes.AddAsync(mappedVehicleType);
+            await _uow.VehicleTypes.AddAsync(mappedVehicleType);
             var result = await _uow.CompleteAsync();
 
             if (result > 0)

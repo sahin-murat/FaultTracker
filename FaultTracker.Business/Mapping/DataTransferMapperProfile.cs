@@ -63,6 +63,18 @@ namespace FaultTracker.Business.Mapping
             CreateMap<StatusRequestDto, Status>();
             #endregion
 
+            #region Picture Group Mappers
+
+            //Map PictureGroup => PictureGroupSharedDto
+            CreateMap<PictureGroup, PictureGroupSharedDto>();
+
+            //Map PictureGroupSharedDto =>  PictureGroup 
+            CreateMap<PictureGroupSharedDto, PictureGroup>();
+
+            //Map PictureGroupRequestDto =>  PictureGroup 
+            CreateMap<PictureGroupRequestDto, PictureGroup>();
+            #endregion
+
         }
     }
 }
