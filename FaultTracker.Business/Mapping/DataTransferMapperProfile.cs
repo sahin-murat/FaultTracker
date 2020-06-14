@@ -106,7 +106,7 @@ namespace FaultTracker.Business.Mapping
             CreateMap<MaintenanceHistoryRequestDto, MaintenanceHistory>();
             #endregion
 
-            #region Maintenance Histories Mappers
+            #region Action Type Mappers
 
             //Map ActionType => ActionTypeSharedDto
             CreateMap<ActionType, ActionTypeSharedDto>();
