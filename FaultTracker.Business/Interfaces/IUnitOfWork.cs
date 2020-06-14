@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FaultTracker.Business.Interfaces
 {
@@ -15,9 +16,9 @@ namespace FaultTracker.Business.Interfaces
         IMaintenanceRepository Maintenances { get; }
         IActionTypeRepository ActionTypes { get;  }
 
-        bool BeginNewTransaction();
-        bool RollBackTransaction();
+        Task<bool> BeginNewTransactionAsync();
+        Task<bool> RollBackTransactionAsync();
 
-        int Complete();
+        Task<int> CompleteAsync();
     }
 }

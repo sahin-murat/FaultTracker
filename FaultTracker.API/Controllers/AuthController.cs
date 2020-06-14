@@ -1,4 +1,4 @@
-﻿using FaultTracker.Business.DataTransfer.Request;
+﻿using FaultTracker.Business.DataTransfer.Shared;
 using FaultTracker.Business.Interfaces;
 using FaultTracker.Business.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -18,58 +18,64 @@ namespace FaultTracker.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly UnitOfWork _UoW;
+        private readonly UnitOfWork _uow;
 
         public AuthController(IConfiguration configuration, IUnitOfWork unitOfWork )
         {
             _configuration = configuration;
-            _UoW = unitOfWork as UnitOfWork;
-        }
-
-        [HttpGet]
-        [Route("Test")]
-        public async Task<IActionResult> Test()
-        {
-            var items = _UoW.Users.GetAll();
-            return Ok(items);
+            _uow = unitOfWork as UnitOfWork;
         }
 
         [HttpPost]
         [Route("Authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] UserRequestDto user)
+        public async Task<IActionResult> Authenticate([FromBody] UserSharedDto user)
         {
-            //Add claims for user 
-            var claims = new[]
+            //Before creating token, the user information must validate
+            var userData = await _uow.Users.GetAsync(user.ID);
+
+            if(userData != null 
+                && userData.ID > 0 
+                && userData.IsDeleted != true
+                && userData.FirstName == user.FirstName
+                && userData.LastName == user.LastName)
             {
+                //Add claims for user 
+                var claims = new[]
+                {
                 new Claim(JwtRegisteredClaimNames.Jti, user.ID.ToString()),
                 new Claim("Name", user.FirstName ),
                 new Claim("LastName", user.LastName )
             };
 
-            //Create Key
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthenticationOptions:Secret"]));
-            //Decide algoritm
-            var algorithm = SecurityAlgorithms.HmacSha256;
+                //Create Key
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthenticationOptions:Secret"]));
+                //Decide algoritm
+                var algorithm = SecurityAlgorithms.HmacSha256;
 
-            //Prepare credentials
-            var signingCredentials = new SigningCredentials(key, algorithm);
+                //Prepare credentials
+                var signingCredentials = new SigningCredentials(key, algorithm);
 
-            var notBefore = DateTime.Now;
-            var expires = notBefore.AddMinutes(60);
+                var notBefore = DateTime.Now;
+                var expires = notBefore.AddMinutes(60);
 
-            //Prepare token 
-            var token = new JwtSecurityToken(
-                _configuration["AuthenticationOptions:Issuer"],
-                _configuration["AuthenticationOptions:Audience"],
-                claims,
-                notBefore: notBefore,
-                expires: expires,
-                signingCredentials);
+                //Prepare token 
+                var token = new JwtSecurityToken(
+                    _configuration["AuthenticationOptions:Issuer"],
+                    _configuration["AuthenticationOptions:Audience"],
+                    claims,
+                    notBefore: notBefore,
+                    expires: expires,
+                    signingCredentials);
 
-            //Create acces token 
-            var accesToken = new JwtSecurityTokenHandler().WriteToken(token);
+                //Create acces token 
+                var accesToken = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return Ok(new { AccesToken = accesToken, Expires = expires });
+                return Ok(new {  Success = true, Message = "Token created successfully and valid for 60 minutes.", AccesToken = accesToken, Expires = expires });
+            }
+            else
+            {
+                return NotFound(new { Success = false, Message = "User not found with given data, Token was not created."});
+            }           
         }
 
         [Authorize]

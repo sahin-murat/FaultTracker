@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FaultTracker.Business.Services
 {
@@ -20,13 +21,13 @@ namespace FaultTracker.Business.Services
         /// <param name="startDate"></param>
         /// <param name="finishDate"></param>
         /// <returns></returns>
-        public IEnumerable<T> GetAllByCreatedDate(DateTime startDate, DateTime finishDate)
+        public async Task<IEnumerable<T>> GetAllByCreatedDateAsync(DateTime startDate, DateTime finishDate)
         {
-            return _entity
+            return await _entity
                     .Where(e =>
                         (startDate != null ? e.CreateDate >= startDate : true)
                         && (finishDate != null ? e.CreateDate <= finishDate : true))
-                    .ToList();
+                    .ToListAsync();
         }
 
         /// <summary>
@@ -34,11 +35,11 @@ namespace FaultTracker.Business.Services
         /// </summary>
         /// <param name="createdUserID"></param>
         /// <returns></returns>
-        public IEnumerable<T> GetAllByCreatedUserId(int createdUserID)
+        public async Task<IEnumerable<T>> GetAllByCreatedUserIdAsync(int createdUserID)
         {
-            return _entity
-             .Where(e => e.CreatedBy == createdUserID)
-             .ToList();
+            return await _entity
+                     .Where(e => e.CreatedBy == createdUserID)
+                     .ToListAsync();
         }
 
         /// <summary>
@@ -48,13 +49,13 @@ namespace FaultTracker.Business.Services
         /// <param name="startDate"></param>
         /// <param name="finishDate"></param>
         /// <returns></returns>
-        public IEnumerable<T> GetAllByModifiedDate(DateTime startDate, DateTime finishDate)
+        public async Task<IEnumerable<T>> GetAllByModifiedDateAsync(DateTime startDate, DateTime finishDate)
         {
-            return _entity
+            return await _entity
                     .Where(e =>
                         (startDate != null ? e.ModifyDate >= startDate : true)
                         && (finishDate != null ? e.ModifyDate <= finishDate : true))
-                    .ToList();
+                    .ToListAsync();
         }
 
         /// <summary>
@@ -63,35 +64,35 @@ namespace FaultTracker.Business.Services
         /// </summary>
         /// <param name="modifiedUserID"></param>
         /// <returns></returns>
-        public IEnumerable<T> GetAllByModifiedUserId(int modifiedUserID)
+        public async Task<IEnumerable<T>> GetAllByModifiedUserIdAsync(int modifiedUserID)
         {
-            return _entity
+            return await _entity
                 .Where(e => e.ModifiedBy == modifiedUserID)
-                .ToList();
+                .ToListAsync();
         }
 
         /// <summary>
         /// Get a list of entity that's IsDeleted = True
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<T> GetAllDeleted()
+        public async Task<IEnumerable<T>> GetAllDeletedAsync()
         {
-            return _entity
+            return await _entity
                 .Where(e =>
                     e.IsDeleted == true)
-                .ToList();
+                .ToListAsync();
         }
 
         /// <summary>
         /// Get a list of entity that's IsDeleted = False
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<T> GetAllNonDelted()
+        public async Task<IEnumerable<T>> GetAllNonDeltedAsync()
         {
-            return _entity
+            return await _entity
                 .Where(e =>
                     e.IsDeleted == false)
-                .ToList();
+                .ToListAsync();
         }
     }
 }

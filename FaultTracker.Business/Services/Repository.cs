@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace FaultTracker.Business.Services
 {
@@ -21,18 +22,18 @@ namespace FaultTracker.Business.Services
         /// Add new Entity into DbContext
         /// </summary>
         /// <param name="entity">Send your entity class</param>
-        public void Add(T entity)
+        public async void AddAsync(T entity)
         {
-            _context.Add(entity);
+            await _context.AddAsync(entity);
         }
 
         /// <summary>
         /// Add some list of entities into DbContext
         /// </summary>
         /// <param name="entities">Send List with your entity class</param>
-        public void AddRange(IEnumerable<T> entities)
+        public async void AddRangeAsync(IEnumerable<T> entities)
         {
-            _context.AddRange(entities);
+            await _context.AddRangeAsync(entities);
         }
 
         /// <summary>
@@ -40,18 +41,18 @@ namespace FaultTracker.Business.Services
         /// </summary>
         /// <param name="predicate">Send expression clause (e => e.Property == something ) etc.</param>
         /// <returns></returns>
-        public IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate)
         {
-            return _entity.Where(predicate).ToList();
+            return await _entity.Where(predicate).ToListAsync();
         }
 
         /// <summary>
         /// Get first record in Db, if empty null will be returned
         /// </summary>
         /// <returns></returns>
-        public T First()
+        public async Task<T> FirstAsync()
         {
-            return _entity.FirstOrDefault();
+            return await _entity.FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -59,27 +60,27 @@ namespace FaultTracker.Business.Services
         /// </summary>
         /// <param name="id">Int Id</param>
         /// <returns></returns>
-        public T Get(int id)
+        public async Task<T> GetAsync(int id)
         {
-            return _entity.Find(id);
+            return await _entity.FindAsync(id);
         }
 
         /// <summary>
         /// Get all entity records without any filter
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return _entity.ToList();
+            return await _entity.ToListAsync();
         }
 
         /// <summary>
         /// Get last record in db for your entity, if empty return will be null
         /// </summary>
         /// <returns></returns>
-        public T Last()
+        public async Task<T> LastAsync()
         {
-            return _entity.LastOrDefault();
+            return await _entity.LastOrDefaultAsync();
         }
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace FaultTracker.Business.Services
         /// <param name="entity">Send the entity class you wan't to delete</param>
         public void Remove(T entity)
         {
-            _entity.Remove(entity);
+           _entity.Remove(entity);
         }
 
         /// <summary>

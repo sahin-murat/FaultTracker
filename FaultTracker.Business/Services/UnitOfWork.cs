@@ -3,6 +3,7 @@ using FaultTracker.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
+using System.Threading.Tasks;
 
 namespace FaultTracker.Business.Services
 {
@@ -24,7 +25,6 @@ namespace FaultTracker.Business.Services
             ActionTypes = new ActionTypeService(_context);
         }
 
-
         public IVehicleTypeRepository VehicleTypes { get; private set; }
 
         public IVehicleRepository Vehicles { get; private set; }
@@ -45,11 +45,11 @@ namespace FaultTracker.Business.Services
         /// Create new transaction 
         /// </summary>
         /// <returns></returns>
-        public bool BeginNewTransaction()
+        public async Task<bool> BeginNewTransactionAsync()
         {
             try
             {
-                _transaction = _context.Database.BeginTransaction();
+                _transaction = await _context.Database.BeginTransactionAsync();
                 return true;
             }
             catch (Exception)
@@ -62,9 +62,9 @@ namespace FaultTracker.Business.Services
         /// Apply all the CRUD operations in one transaction, if any error accured in applied operations DB will automatically Rollbacked
         /// </summary>
         /// <returns></returns>
-        public int Complete()
+        public async Task<int> CompleteAsync()
         {
-            var transaction = _transaction != null ? _transaction : _context.Database.BeginTransaction();
+            var transaction = _transaction != null ? _transaction : await _context.Database.BeginTransactionAsync();
 
             using (transaction)
             {
@@ -75,15 +75,15 @@ namespace FaultTracker.Business.Services
                         throw new ArgumentException("Context is null");
                     }
 
-                    int result = _context.SaveChanges();
+                    int result = await _context.SaveChangesAsync();
 
-                    transaction.Commit();
+                    await transaction.CommitAsync();
 
                     return result;
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback();
+                     await transaction.RollbackAsync();
                     throw new Exception("Error on complete", ex);
                 }
             }
@@ -94,11 +94,11 @@ namespace FaultTracker.Business.Services
             _context.Dispose();
         }
 
-        public bool RollBackTransaction()
+        public async Task<bool> RollBackTransactionAsync()
         {
             try
             {
-                _transaction.Rollback();
+                 await _transaction.RollbackAsync();
                 _transaction = null;
                 return true;
             }

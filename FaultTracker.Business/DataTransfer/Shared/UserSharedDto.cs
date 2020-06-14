@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FaultTracker.Business.DataTransfer.Request
+namespace FaultTracker.Business.DataTransfer.Shared
 {
-    public class UserRequestDto
+    public class UserSharedDto
     {
         public int ID { get; set; }
         public string FirstName { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace FaultTracker.Business.Interfaces
 {
@@ -11,44 +12,44 @@ namespace FaultTracker.Business.Interfaces
         /// </summary>
         /// <param name="id">Int Id</param>
         /// <returns></returns>
-        T Get(int id);
+        Task<T> GetAsync(int id);
 
         /// <summary>
         /// Get first record in Db, if empty null will be returned
         /// </summary>
         /// <returns></returns>
-        T First();
+        Task<T> FirstAsync();
 
         /// <summary>
         /// Get last record in db for your entity, if empty return will be null
         /// </summary>
         /// <returns></returns>
-        T Last();
+        Task<T> LastAsync();
 
         /// <summary>
         /// Get all entity records without any filter
         /// </summary>
         /// <returns></returns>
-        IEnumerable<T> GetAll();
+        Task<IEnumerable<T>> GetAllAsync();
 
         /// <summary>
         /// Find the entities with expression / query
         /// </summary>
         /// <param name="predicate">Send expression clause (e => e.Property == something ) etc.</param>
         /// <returns></returns>
-        IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// Add new Entity into DbContext
         /// </summary>
         /// <param name="entity">Send your entity class</param>
-        void Add(T entity);
+        void AddAsync(T entity);
 
         /// <summary>
         /// Add some list of entities into DbContext
         /// </summary>
         /// <param name="entities">Send List with your entity class</param>
-        void AddRange(IEnumerable<T> entities);
+        void AddRangeAsync(IEnumerable<T> entities);
 
         /// <summary>
         /// Remove an entity from DbContext
