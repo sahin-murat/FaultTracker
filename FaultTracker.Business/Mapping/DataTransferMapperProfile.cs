@@ -88,13 +88,22 @@ namespace FaultTracker.Business.Mapping
                 .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status.Name))
                 .ForMember(dest => dest.MaintenanceHistories, opt => opt.MapFrom(src => src.MaintenanceHistories.Select(mh => new MaintenanceHistorySharedDto { Text = mh.text, ID = mh.ID, ActionTypeName = mh.ActionType.Name })));
 
-
-            //Map PictureGroupSharedDto =>  PictureGroup 
-            //CreateMap<PictureGroupSharedDto, PictureGroup>();
-
             //Map MaintenanceRequestDto =>  Maintenance 
             CreateMap<MaintenanceRequestDto, Maintenance>();
 
+            #endregion
+
+            #region Maintenance Histories Mappers
+
+            //Map MaintenanceHistory => MaintenanceHistorySharedDto
+            CreateMap<MaintenanceHistory, MaintenanceHistorySharedDto>()
+                .ForMember(dest => dest.ActionTypeName, opt => opt.MapFrom(src => src.ActionType.Name));
+
+            //Map MaintenanceHistorySharedDto =>  MaintenanceHistory 
+            CreateMap<MaintenanceHistorySharedDto, MaintenanceHistory>();
+
+            //Map MaintenanceHistoryRequestDto =>  MaintenanceHistory 
+            CreateMap<MaintenanceHistoryRequestDto, MaintenanceHistory>();
             #endregion
 
         }
