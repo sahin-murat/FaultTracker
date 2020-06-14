@@ -8,8 +8,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System;
 using System.Diagnostics;
-using FaultTracker.Data;
 using Microsoft.EntityFrameworkCore;
+using FaultTracker.Business.Interfaces;
+using FaultTracker.Business.Services;
+using FaultTracker.Data;
 
 namespace FaultTracker.API
 {
@@ -43,10 +45,14 @@ namespace FaultTracker.API
                     };
                 });
 
-            services.AddControllers();
-
-            services.AddEntityFrameworkNpgsql().AddDbContext<DatabaseContext>(opt => 
+            //DB Context DI here
+            services.AddDbContext<DatabaseContext>(opt =>
                 opt.UseNpgsql(Configuration["ConnectionStrings:DataAccessPostgreSqlProvider"]));
+            //Unit of Work DI
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            
+
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

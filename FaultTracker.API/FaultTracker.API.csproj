@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FaultTracker.Data\FaultTracker.Data.csproj" />
+    <ProjectReference Include="..\FaultTracker.Business\FaultTracker.Business.csproj" />
   </ItemGroup>
 
 

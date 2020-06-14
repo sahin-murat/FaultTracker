@@ -1,52 +1,49 @@
-﻿using FaultTracker.Data;
+﻿using FaultTracker.Business.DataTransfer.Request;
+using FaultTracker.Business.Interfaces;
+using FaultTracker.Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace FaultTracker.API.Controllers
 {
-
-    public class userObj { public int id { get; set; } public string name { get; set; } public string surname { get; set; } }
-
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly DatabaseContext _databaseContext;
+        private readonly UnitOfWork _UoW;
 
-        public AuthController(IConfiguration configuration, DatabaseContext databaseContext)
+        public AuthController(IConfiguration configuration, IUnitOfWork unitOfWork )
         {
             _configuration = configuration;
-            _databaseContext = databaseContext;
-        }        
+            _UoW = unitOfWork as UnitOfWork;
+        }
 
         [HttpGet]
         [Route("Test")]
         public async Task<IActionResult> Test()
         {
-            var users = _databaseContext.User.ToList();
-
-            return Ok(users);
+            var items = _UoW.Users.GetAll();
+            return Ok(items);
         }
 
         [HttpPost]
         [Route("Authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] userObj user)
+        public async Task<IActionResult> Authenticate([FromBody] UserRequestDto user)
         {
             //Add claims for user 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Jti, user.id.ToString()),
-                new Claim("Name", user.name ),
-                new Claim("Surname", user.surname )
+                new Claim(JwtRegisteredClaimNames.Jti, user.ID.ToString()),
+                new Claim("Name", user.FirstName ),
+                new Claim("LastName", user.LastName )
             };
 
             //Create Key
