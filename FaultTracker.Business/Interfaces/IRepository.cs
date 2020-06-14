@@ -52,6 +52,12 @@ namespace FaultTracker.Business.Interfaces
         void AddRangeAsync(IEnumerable<T> entities);
 
         /// <summary>
+        /// Updates the entity in context without commiting
+        /// </summary>
+        /// <param name="entity"></param>
+        void Update(T entity);
+
+        /// <summary>
         /// Remove an entity from DbContext
         /// </summary>
         /// <param name="entity">Send the entity class you wan't to delete</param>

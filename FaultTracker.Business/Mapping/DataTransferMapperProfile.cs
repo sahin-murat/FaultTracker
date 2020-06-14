@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
+using FaultTracker.Business.DataTransfer.Request;
 using FaultTracker.Business.DataTransfer.Shared;
 using FaultTracker.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FaultTracker.Business.Mapping
 {
@@ -11,8 +9,29 @@ namespace FaultTracker.Business.Mapping
     {
         public DataTransferMapperProfile()
         {
-            //Map user
+            #region User Mappers
+
+            //Map User => UserSharedDto
             CreateMap<User, UserSharedDto>();
+
+            //Map UserSharedDto => User
+            CreateMap<UserSharedDto, User>();
+
+            //Map UserRequestDto => User
+            CreateMap<UserRequestDto, User>();
+
+            #endregion
+
+            #region Vehicle Type Mappers
+
+            //Map VehicleType => VehicleTypeSharedDto
+            CreateMap<VehicleType, VehicleTypeSharedDto>();
+
+            //Map VehicleTypeSharedDto =>  VehicleType 
+            CreateMap<VehicleTypeSharedDto, VehicleType>();
+
+            #endregion
+
         }
     }
 }

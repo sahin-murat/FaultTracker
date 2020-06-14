@@ -1,4 +1,5 @@
 ﻿using FaultTracker.Business.Interfaces;
+using FaultTracker.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,15 @@ namespace FaultTracker.Business.Services
         public async void AddRangeAsync(IEnumerable<T> entities)
         {
             await _context.AddRangeAsync(entities);
+        }
+        /// <summary>
+        /// Updates the entity in context without committing
+        /// </summary>
+        /// <param name="entity"></param>
+        public void Update(T entity)
+        {
+            _entity.Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
         }
 
         /// <summary>
