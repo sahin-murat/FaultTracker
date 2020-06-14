@@ -3,6 +3,7 @@ using FaultTracker.Business.DataTransfer.Request;
 using FaultTracker.Business.DataTransfer.Shared;
 using FaultTracker.Data.Entities;
 using System.Data.Common;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace FaultTracker.Business.Mapping
@@ -73,6 +74,27 @@ namespace FaultTracker.Business.Mapping
 
             //Map PictureGroupRequestDto =>  PictureGroup 
             CreateMap<PictureGroupRequestDto, PictureGroup>();
+            #endregion
+
+            #region Maintenance Mappers
+
+            //Map Maintenance => MaintenanceSharedDto
+            CreateMap<Maintenance, MaintenanceSharedDto>()
+                .ForMember(dest => dest.VehiclePlateNo, opt => opt.MapFrom(src => src.Vehicle.PlateNo))
+                .ForMember(dest => dest.VehicleTypeName, opt => opt.MapFrom(src => src.Vehicle.VehicleType.Name))
+                .ForMember(dest => dest.DriverFullName, opt => opt.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"))
+                .ForMember(dest => dest.DriverPhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ForMember(dest => dest.PictureImage, opt => opt.MapFrom(src => src.PictureGroup.PictureImage))
+                .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status.Name))
+                .ForMember(dest => dest.MaintenanceHistories, opt => opt.MapFrom(src => src.MaintenanceHistories.Select(mh => new MaintenanceHistorySharedDto { Text = mh.text, ID = mh.ID, ActionTypeName = mh.ActionType.Name })));
+
+
+            //Map PictureGroupSharedDto =>  PictureGroup 
+            //CreateMap<PictureGroupSharedDto, PictureGroup>();
+
+            //Map MaintenanceRequestDto =>  Maintenance 
+            CreateMap<MaintenanceRequestDto, Maintenance>();
+
             #endregion
 
         }
