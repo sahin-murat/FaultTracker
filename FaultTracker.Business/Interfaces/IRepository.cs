@@ -43,13 +43,13 @@ namespace FaultTracker.Business.Interfaces
         /// Add new Entity into DbContext
         /// </summary>
         /// <param name="entity">Send your entity class</param>
-        void AddAsync(T entity);
+        Task<T> AddAsync(T entity);
 
         /// <summary>
         /// Add some list of entities into DbContext
         /// </summary>
         /// <param name="entities">Send List with your entity class</param>
-        void AddRangeAsync(IEnumerable<T> entities);
+        Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
 
         /// <summary>
         /// Updates the entity in context without commiting

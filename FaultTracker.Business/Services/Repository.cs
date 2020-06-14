@@ -23,19 +23,22 @@ namespace FaultTracker.Business.Services
         /// Add new Entity into DbContext
         /// </summary>
         /// <param name="entity">Send your entity class</param>
-        public async void AddAsync(T entity)
+        public async Task<T> AddAsync(T entity)
         {
             await _context.AddAsync(entity);
+            return entity;
         }
 
         /// <summary>
         /// Add some list of entities into DbContext
         /// </summary>
         /// <param name="entities">Send List with your entity class</param>
-        public async void AddRangeAsync(IEnumerable<T> entities)
+        public async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities)
         {
             await _context.AddRangeAsync(entities);
+            return entities;
         }
+
         /// <summary>
         /// Updates the entity in context without committing
         /// </summary>
