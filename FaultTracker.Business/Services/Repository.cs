@@ -99,7 +99,9 @@ namespace FaultTracker.Business.Services
         /// <param name="entity">Send the entity class you wan't to delete</param>
         public void Remove(T entity)
         {
-           _entity.Remove(entity);
+            var ent = entity as BaseEntityModel;
+            ent.IsDeleted = true;
+            Update(ent as T);
         }
 
         /// <summary>

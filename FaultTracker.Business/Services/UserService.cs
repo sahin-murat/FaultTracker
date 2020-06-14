@@ -9,11 +9,5 @@ namespace FaultTracker.Business.Services
         public UserService(DbContext context) : base(context)
         {
         }
-
-        public async void Remove(User user)
-        {
-            user.IsDeleted = true;
-            Update(user);
-        }
     }
 }

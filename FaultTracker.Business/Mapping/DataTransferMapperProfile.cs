@@ -30,6 +30,9 @@ namespace FaultTracker.Business.Mapping
             //Map VehicleTypeSharedDto =>  VehicleType 
             CreateMap<VehicleTypeSharedDto, VehicleType>();
 
+            //Map VehicleTypeRequestDto =>  VehicleType 
+            CreateMap<VehicleTypeRequestDto, VehicleType>();
+
             #endregion
 
         }
