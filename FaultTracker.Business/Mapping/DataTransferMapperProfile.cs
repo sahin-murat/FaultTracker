@@ -51,6 +51,18 @@ namespace FaultTracker.Business.Mapping
 
             #endregion
 
+            #region Status Mappers
+
+            //Map Status => StatusSharedDto
+            CreateMap<Status, StatusSharedDto>();
+
+            //Map StatusSharedDto =>  Status 
+            CreateMap<StatusSharedDto, Status>();
+
+            //Map StatusRequestDto =>  Status 
+            CreateMap<StatusRequestDto, Status>();
+            #endregion
+
         }
     }
 }

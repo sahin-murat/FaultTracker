@@ -45,7 +45,7 @@ namespace FaultTracker.API.Controllers
         [Route("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            //Get vehicle
+            //Get vehicles
             var vehicleList = await _uow.Vehicles.GetAllVehiclesWithRelationsAsync();
 
             //if not empty, map vehicle list => VehicleSharedDto list
