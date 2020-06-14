@@ -18,7 +18,6 @@ namespace FaultTracker.Business.Interfaces
 
         Task<bool> BeginNewTransactionAsync();
         Task<bool> RollBackTransactionAsync();
-
         Task<int> CompleteAsync();
     }
 }

@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using FaultTracker.Business.Interfaces;
 using FaultTracker.Business.Services;
 using FaultTracker.Data;
+using AutoMapper;
+using FaultTracker.Business.Mapping;
 
 namespace FaultTracker.API
 {
@@ -49,10 +51,15 @@ namespace FaultTracker.API
             services.AddDbContext<DatabaseContext>(opt =>
                 opt.UseNpgsql(Configuration["ConnectionStrings:DataAccessPostgreSqlProvider"]));
             //Unit of Work DI
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            
+            services.AddTransient<IUnitOfWork, UnitOfWork>();           
 
             services.AddControllers();
+
+            //Auto Mapper injection
+            services.AddAutoMapper(typeof(Startup));
+            services.AddSingleton(provider => new MapperConfiguration(cfg => {
+                cfg.AddProfile(new DataTransferMapperProfile());
+            }).CreateMapper());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
